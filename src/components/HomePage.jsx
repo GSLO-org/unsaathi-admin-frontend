@@ -39,17 +39,13 @@ export default function HomePage() {
     fetchBlogs();
   }, []);
 
-  // Testimonial handlers
+  // Testimonial handlers - SIMPLIFIED (api.js handles tokens)
   async function handleAddOrEditTestimonial(data) {
     try {
       if (editingTestimonial) {
-        await api.put(`/testimonials/${editingTestimonial._id}`, data, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        });
+        await api.put(`/testimonials/${editingTestimonial._id}`, data);
       } else {
-        await api.post('/testimonials', data, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        });
+        await api.post('/testimonials', data);
       }
       setShowTestimonialForm(false);
       setEditingTestimonial(null);
@@ -62,9 +58,7 @@ export default function HomePage() {
   async function handleDeleteTestimonial(id) {
     if (!window.confirm('Are you sure you want to delete this testimonial?')) return;
     try {
-      await api.delete(`/testimonials/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      await api.delete(`/testimonials/${id}`);
       fetchTestimonials();
     } catch (err) {
       console.error('Delete testimonial error:', err);
@@ -76,35 +70,15 @@ export default function HomePage() {
     setShowTestimonialForm(true);
   }
 
-  // Blog handlers
-  async function handleAddOrEditBlog(data, files) {
+  // Blog handlers - SIMPLIFIED (api.js handles tokens)
+  async function handleAddOrEditBlog(blogData) {
     try {
-      let imageUrls = data.images || [];
-
-      if (files && files.length > 0) {
-        const formData = new FormData();
-        files.forEach((file) => formData.append('images', file));
-
-        const uploadRes = await api.post('/upload', formData, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        });
-        imageUrls = [...imageUrls, ...(uploadRes.data.imageUrls || [])];
-      }
-
       if (editingBlog) {
-        await api.put(
-          `/blogs/${editingBlog._id}`,
-          { ...data, images: imageUrls },
-          { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-        );
+        await api.put(`/blogs/${editingBlog._id}`, blogData);
       } else {
-        await api.post(
-          '/blogs',
-          { ...data, images: imageUrls },
-          { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-        );
+        await api.post('/blogs', blogData);
       }
-
+      
       setShowBlogForm(false);
       setEditingBlog(null);
       fetchBlogs();
@@ -114,14 +88,19 @@ export default function HomePage() {
   }
 
   async function handleDeleteBlog(id) {
-    if (!window.confirm('Are you sure you want to delete this blog?')) return;
+    console.log('Deleting blog ID:', id);
+    console.log('Token:', localStorage.getItem('token'));
+    
+    if (!window.confirm('Are you sure?')) return;
+
     try {
-      await api.delete(`/blogs/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      await api.delete(`/blogs/${id}`);
       fetchBlogs();
     } catch (err) {
       console.error('Delete blog error:', err);
+      if (err.response) {
+        console.error('Response data:', err.response.data);
+      }
     }
   }
 
@@ -129,6 +108,12 @@ export default function HomePage() {
     setEditingBlog(item);
     setShowBlogForm(true);
   }
+
+  // ✅ NEW: Logout function
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
