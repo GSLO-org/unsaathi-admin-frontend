@@ -104,10 +104,15 @@ export default function HomePage() {
     }
   }
 
-  function handleEditBlog(item) {
-    setEditingBlog(item);
+  async function handleEditBlog(item) {
+  try {
+    const res = await api.get(`/blogs/${item._id}`);
+    setEditingBlog(res.data); // ✅ FULL BLOG WITH CONTENT
     setShowBlogForm(true);
+  } catch (err) {
+    console.error('Fetch single blog failed:', err);
   }
+}
 
   // ✅ NEW: Logout function
   const handleLogout = () => {
@@ -165,18 +170,20 @@ export default function HomePage() {
                   }}
                 />
                 <BlogTable data={blogs} onEdit={handleEditBlog} onDelete={handleDeleteBlog} />
-                {showBlogForm && (
-                  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <BlogForm
-                      initialData={editingBlog}
-                      onSubmit={handleAddOrEditBlog}
-                      onClose={() => {
-                        setShowBlogForm(false);
-                        setEditingBlog(null);
-                      }}
-                    />
-                  </div>
-                )}
+                {showBlogForm && editingBlog !== undefined && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <BlogForm
+      key={editingBlog?._id || 'new'}
+      initialData={editingBlog}
+      onSubmit={handleAddOrEditBlog}
+      onClose={() => {
+        setShowBlogForm(false);
+        setEditingBlog(null);
+      }}
+    />
+  </div>
+)}
+
               </>
             }
           />
