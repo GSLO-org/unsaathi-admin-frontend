@@ -16,6 +16,9 @@ export default function Sidebar() {
         <Link to="/blogs" className="block py-2 px-4 rounded hover:bg-gray-700">
           Blogs
         </Link>
+        <Link to="/faq" className="block py-2 px-4 rounded hover:bg-gray-700">
+          Faqs
+        </Link>
       </nav>
       <button
         onClick={handleLogout}
