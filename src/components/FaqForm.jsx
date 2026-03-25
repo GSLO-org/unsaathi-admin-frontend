@@ -54,16 +54,46 @@ export default function FAQForm({ onSubmit, onClose, initialData = null }) {
           required
         />
         <select
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          className="w-full p-2 border rounded mb-3"
-        >
-          <option value="general">General</option>
-          <option value="divorce">Divorce</option>
-          <option value="custody">Custody</option>
-          <option value="alimony">Alimony</option>
-        </select>
+  name="category"
+  value={form.category}
+  onChange={handleChange}
+  className="w-full p-2 border rounded mb-3"
+>
+  <option value="general">General (all pages)</option>
+
+  <optgroup label="Service Pages">
+    <option value="services">Services Page</option>
+    <option value="mutual-divorce">Services → Mutual Divorce</option>
+    <option value="contested-divorce">Services → Contested Divorce</option>
+    <option value="maintanance-and-alimony">Services → Maintenance & Alimony</option>
+    <option value="dowry">Services → Dowry</option>
+    <option value="child-custody">Services → Child Custody</option>
+    <option value="cruelty">Services → Cruelty</option>
+    <option value="judicial-separation">Services → Judicial Separation</option>
+    <option value="child-visitation">Services → Child Visitation</option>
+    <option value="annulment-of-marriage">Services → Annulment of Marriage</option>
+    <option value="conjugal-rights">Services → Conjugal Rights</option>
+  </optgroup>
+
+  <optgroup label="City Pages">
+    <option value="divorce-lawyer-noida">Divorce Lawyer → Noida</option>
+    <option value="divorce-lawyer-delhi">Divorce Lawyer → Delhi</option>
+    <option value="divorce-lawyer-gurgaon">Divorce Lawyer → Gurgaon</option>
+  </optgroup>
+
+  <optgroup label="Other Pages">
+    <option value="home">Home Page</option>
+    <option value="why-unsaathi">Why Unsaathi</option>
+    <option value="how-unsaathi">How Unsaathi Works</option>
+    <option value="about-us">About Us</option>
+    <option value="connect-with-us">Connect With Us</option>
+    <option value="contact">Contact Us</option>
+    <option value="services">Services Page</option>
+    <option value="faqs">FAQ Page</option>
+    <option value="about-us">About Us (lowercase, if you ever use it)</option>
+  </optgroup>
+</select>
+
         <input
           name="order"
           type="number"
