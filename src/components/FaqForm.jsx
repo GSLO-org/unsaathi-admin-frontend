@@ -15,7 +15,8 @@ export default function FAQForm({ onSubmit, onClose, initialData = null }) {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/blogs'); // change if your backend URL differs
+        // const res = await fetch('http://localhost:5000/api/blogs'); 
+        const res = await fetch('https://unsaathi-backend.onrender.com/api');
         const data = await res.json();
         setBlogs(data.blogs || data || []);
       } catch (error) {
