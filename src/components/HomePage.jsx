@@ -87,19 +87,23 @@ export default function HomePage() {
 
   // BLOG
   async function handleAddOrEditBlog(blogData) {
-    try {
-      if (editingBlog) {
-        await api.put(`/blogs/${editingBlog._id}`, blogData);
-      } else {
-        await api.post('/blogs', blogData);
-      }
-      setShowBlogForm(false);
-      setEditingBlog(null);
-      fetchBlogs();
-    } catch (err) {
-      console.error('Blog save error:', err.response?.data || err.message);
+  try {
+    console.log('PARENT RECEIVED BLOG DATA:', blogData);
+    console.log('PARENT RECEIVED IMAGES:', blogData.images);
+
+    if (editingBlog) {
+      await api.put(`/blogs/${editingBlog._id}`, blogData);
+    } else {
+      await api.post('/blogs', blogData);
     }
+
+    setShowBlogForm(false);
+    setEditingBlog(null);
+    fetchBlogs();
+  } catch (err) {
+    console.error('Blog save error:', err.response?.data || err.message);
   }
+}
 
   async function handleDeleteBlog(id) {
     if (!window.confirm('Are you sure?')) return;
